@@ -18,12 +18,14 @@ Class {
 
 { #category : 'converting' }
 SycMigrateReferencesOfClassCommand >> asRefactorings [
-	| refactoring |
-	refactoring :=  RBDeprecateClassRefactoring deprecate: targetClass name in: newName name.
-	refactoring shouldFixSubclasses: false.
-	refactoring shouldCopyExtensions: false.
-	refactoring shouldRemoveExtensions: false.
-	^ { refactoring }
+    | deprecatedClass newClass |
+    deprecatedClass := targetClass realClass.
+    newClass := newName realClass.
+    deprecatedClass deprecatedAliases: { newClass name }.
+
+    self inform: 'Class ', deprecatedClass name, ' has been deprecated. Use ', newClass name, ' instead.'.
+
+    ^ { }
 ]
 
 { #category : 'accessing' }

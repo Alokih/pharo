@@ -42,13 +42,13 @@ RBDeprecateClassDriver >> className: aClassName scopes: refactoringScopes [
 
 { #category : 'execution' }
 RBDeprecateClassDriver >> deprecateAndMigrateReferences [
+    | deprecatedClass newClass |
+    newClassName := self requestClassToMigrateReferencesTo.
+    deprecatedClass := self model classNamed: className.
+    newClass := self model classNamed: newClassName.
+    deprecatedClass deprecatedAliases: { newClass name }.
 
-	newClassName := self requestClassToMigrateReferencesTo.
-	refactoring := RBDeprecateClassRefactoring deprecate: className in: newClassName.
-	refactoring generateChanges.
-	
-	self openPreviewWithChanges: refactoring changes.
-	
+    self inform: 'Class ', deprecatedClass name, ' has been deprecated. Use ', newClass name, ' instead.'.
 ]
 
 { #category : 'execution' }

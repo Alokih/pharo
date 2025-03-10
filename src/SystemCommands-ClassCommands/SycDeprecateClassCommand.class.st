@@ -25,9 +25,14 @@ SycDeprecateClassCommand class >> canBeExecutedInContext: aToolContext [
 
 { #category : 'converting' }
 SycDeprecateClassCommand >> asRefactorings [
-	| refactoring |
-	refactoring := RBDeprecateClassRefactoring deprecate: targetClass name in: newName name.
-	^ { refactoring }
+    | deprecatedClass newClass |
+    deprecatedClass := targetClass realClass.
+    newClass := newName realClass.
+    deprecatedClass deprecatedAliases: { newClass name }.
+
+    self inform: 'Class ', deprecatedClass name, ' has been deprecated. Use ', newClass name, ' instead.'.
+
+    ^ { }
 ]
 
 { #category : 'accessing' }
